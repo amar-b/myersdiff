@@ -78,14 +78,14 @@ class Myersdiffer:
             sign, color = view[editType.value]
 
             if editType == EditType.DEL:
-                value = self.B[old-1]
+                value = self.A[old-1]
             else:
                 value = self.B[new-1]
 
             line = "{}{} {}\n".format(color, sign, value)
             result = line + result
         print(result + "\033[39m")
-        
+
 listX = [i for i in "ABCABBA"]
 listY = [i for i in "CBABAC"]
 differ = Myersdiffer(listX, listY)
