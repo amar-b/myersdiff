@@ -1,5 +1,5 @@
 # myersdiff
-Python implementation of Myers diff algoirthm. Follows implementation described in (James Coglan's blog)[https://blog.jcoglan.com]. Displays ANSI colors in applicable terminals.
+Python implementation of Myers diff algoirthm. Follows implementation described in [James Coglan's blog](https://blog.jcoglan.com). Displays ANSI colors in applicable terminals.
 
 ### Example usage
 ```
