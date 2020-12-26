@@ -1,6 +1,7 @@
 import copy 
+import argparse
 from enum import Enum
-from functools import reduce
+from os import path
 
 class EditType(Enum):
     EQL = 0
@@ -33,7 +34,6 @@ class Myersdiffer:
         return T
 
     def _line_diff(self, x, y, x_prev, y_prev):
-        #print((x_prev,y_prev), "=>", (x, y))
         if x == x_prev:
             return (-1, y_prev+1, EditType.INS)
         elif y == y_prev:
@@ -86,10 +86,47 @@ class Myersdiffer:
             result = line + result
         print(result + "\033[39m")
 
-listX = [i for i in "ABCABBA"]
-listY = [i for i in "CBABAC"]
-differ = Myersdiffer(listX, listY)
+# cli
+def parse_args():
+    parser = argparse.ArgumentParser(description='Myers Differ')
 
-for v in differ.diff():
-    print(v)
-differ.print_diff()
+    parser.add_argument('left',  help='left file path or string')
+    parser.add_argument('right', help='right file path or string')
+    
+    parser.add_argument('-t', 
+        dest='type', 
+        type=str,  
+        default='str',
+        choices=['file', 'str'],
+        help='input type: file or string (default: %(default)s)')
+
+    return parser.parse_args()
+
+def read_files():
+    if path.isfile(args.left) == False:
+        print(f'Invalid file path: {args.left}')
+        return ([], [])
+
+    elif path.isfile(args.right) == False:
+        print(f'Invalid file path: {args.right}')
+        return ([], [])
+
+    else:
+        return ( open(args.left, 'r').read().splitlines(), 
+                 open(args.right, 'r').read().splitlines()
+                )
+
+if __name__ == "__main__":
+    args = parse_args()
+
+    listX, listY = [], []
+
+    if args.type == "str":
+        listX = [x for x in args.left]
+        listY = [x for x in args.right]
+
+    elif args.type == "file":
+        listX, listY = read_files()
+    
+    if len(listX) > 0 or len(listY) > 0:
+        Myersdiffer(listX, listY).print_diff()
